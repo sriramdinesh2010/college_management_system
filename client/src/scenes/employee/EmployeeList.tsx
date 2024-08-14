@@ -1,23 +1,24 @@
 import { Box, Button, useTheme } from "@mui/material";
 import { ThemeSettings } from "../../app/state/theme";
+import useEmployee from "../../hooks/useEmployee";
 import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import {
-  useDeleteStudentMutation,
-  useGetStudentsQuery,
-} from "./SutentApiSlice";
-import { useNavigate } from "react-router-dom";
-import ScaleLoader from "react-spinners/ScaleLoader";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
-const NewTable = () => {
-  const navigate = useNavigate();
+export default function BasicTable() {
   const theme = useTheme<ThemeSettings>();
 
+  //data from react-quary
+  const { data, isLoading, error } = useEmployee();
+
+  if (isLoading) return "loding...";
+  if (error) return "error";
   const handledeleteclick = (_id: string) => {
-    deleteStudent({ id: _id });
+    console.log(_id);
   };
-  const [deleteStudent] = useDeleteStudentMutation();
+  const handleupdateclick = (_id: string) => {
+    console.log(_id);
+  };
   const columns = [
     {
       field: "registernumber",
@@ -30,13 +31,8 @@ const NewTable = () => {
       flex: 0.2,
     },
     {
-      field: "course",
-      headerName: "Course",
-      flex: 0.1,
-    },
-    {
-      field: "currentsemester",
-      headerName: "Semester",
+      field: "role",
+      headerName: "Department",
       flex: 0.2,
     },
     {
@@ -64,15 +60,13 @@ const NewTable = () => {
       headerName: "Update",
       Sorting: null,
       flex: 0.3,
-      renderCell: (_params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Button
           color="secondary"
           size="small"
           variant="contained"
           startIcon={<EditOutlinedIcon />}
-          onClick={() => {
-            navigate("/editStudent");
-          }}
+          onClick={() => handleupdateclick(params.row._id)}
         >
           Update
         </Button>
@@ -95,23 +89,10 @@ const NewTable = () => {
       ),
     },
   ];
-
-  //data from react-quary
-  const { data: students, isLoading } = useGetStudentsQuery(
-    "ReactRTkQuaryList",
-    {
-      pollingInterval: 15000,
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true,
-    }
-  );
-  if (isLoading) {
-    return <ScaleLoader />;
-  }
-  //this is return table
+  if (isLoading) return "loding...";
+  if (error) return "error";
   return (
     <Box
-      m="1.5rem 2.5rem"
       sx={{
         "& .MuiDataGrid-root": {
           border: "none",
@@ -138,13 +119,11 @@ const NewTable = () => {
       }}
     >
       <DataGrid
-        loading={isLoading || !students}
+        loading={isLoading || !data}
         getRowId={(row) => row._id}
-        rows={students || []}
+        rows={data || []}
         columns={columns}
       />
     </Box>
   );
-};
-
-export default NewTable;
+}

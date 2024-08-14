@@ -24,13 +24,13 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/public", express.static(path.join(__dirname, "public")));
-console.log(path.join(__dirname, "public"));
 app.use("/", require("./routes/root"));
 app.use("/users", require("./routes/userRoute"));
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/student", require("./routes/studentRoute"));
 app.use("/employee", require("./routes/employeeRoute"));
 app.use("/notes", require("./routes/noteRoute"));
+app.use("/books", require("./routes/bookRoutes"));
 
 app.all("*", (req, res) => {
   res.status(404);

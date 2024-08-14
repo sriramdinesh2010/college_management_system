@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query/react";
-import { api } from "./api";
+import { apiSlice } from "./api/apiSlice";
 import globalReducer from "./state";
 
 export const store = configureStore({
   reducer: {
     global: globalReducer,
-    [api.reducerPath]: api.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
-  middleware: (getDefault) => getDefault().concat(api.middleware),
+  middleware: (getDefault) => getDefault().concat(apiSlice.middleware),
 });
 setupListeners(store.dispatch);
 

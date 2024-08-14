@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Alert,
   Box,
   Button,
   Grid,
@@ -12,12 +13,12 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import Header from "../../components/Header";
 import { ThemeSettings } from "../../app/state/theme";
+import { useAddNewStudentMutation } from "./SutentApiSlice";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -89,8 +90,8 @@ const StudentReg = () => {
   //alert setup
   const [message, setmessage] = useState("");
   // sumbit handler
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const [addNewStudent] = useAddNewStudentMutation();
+  const onSubmit = async (data: FieldValues) => {
     const formData = new FormData();
     formData.append("image", data.image[0]);
     formData.append("registernumber", data.registernumber);
@@ -112,14 +113,15 @@ const StudentReg = () => {
     formData.append("department", data.department);
     formData.append("currentsemester", data.currentsemester);
     formData.append("joiningdate", data.joiningdate);
-
-    console.log(formData);
-
-    axios
-      .post("http://localhost:5000/student", formData)
-      .then((res) => setmessage(res.data.message));
-    setOpen(true);
-    reset();
+    const result = await addNewStudent(formData).unwrap();
+    try {
+      setmessage(result.message);
+      setOpen(true);
+      reset();
+    } catch (error) {
+      setmessage(result.data.message);
+      setOpen(true);
+    }
   };
   const [open, setOpen] = useState(false);
   const handleClose = (
@@ -151,7 +153,11 @@ const StudentReg = () => {
           autoHideDuration={5000}
           onClose={handleClose}
           message={message}
-        />
+        >
+          <Alert onClose={handleClose} severity="success">
+            {message}
+          </Alert>
+        </Snackbar>
         <br></br>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="h6" gutterBottom>

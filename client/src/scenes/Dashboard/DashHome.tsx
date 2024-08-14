@@ -26,6 +26,7 @@ const DashHome = () => {
               display: "flex",
               flexDirection: "column",
               height: 240,
+              backgroundColor: theme.palette.background.alt,
             }}
           ></Paper>
         </Grid>
@@ -36,8 +37,8 @@ const DashHome = () => {
               display: "flex",
               flexDirection: "column",
               height: 100,
+              backgroundColor: theme.palette.background.alt,
             }}
-            className="glass_effect"
           >
             <Typography align="center" gutterBottom>
               Total No.of Student
@@ -55,6 +56,7 @@ const DashHome = () => {
               display: "flex",
               flexDirection: "column",
               height: 100,
+              backgroundColor: theme.palette.background.alt,
             }}
           >
             <Typography align="center" gutterBottom>
@@ -73,7 +75,7 @@ const DashHome = () => {
               display: "flex",
               flexDirection: "column",
               height: 100,
-              backgroundColor: { color: theme.palette.secondary[300] },
+              backgroundColor: theme.palette.background.alt,
             }}
           >
             <Typography align="center" gutterBottom>
@@ -91,6 +93,7 @@ const DashHome = () => {
               display: "flex",
               flexDirection: "column",
               height: 100,
+              backgroundColor: theme.palette.background.alt,
             }}
           >
             <Typography align="center" gutterBottom>
@@ -108,6 +111,7 @@ const DashHome = () => {
               display: "flex",
               flexDirection: "column",
               height: 100,
+              backgroundColor: theme.palette.background.alt,
             }}
           >
             <Typography align="center" gutterBottom>
@@ -125,6 +129,7 @@ const DashHome = () => {
               display: "flex",
               flexDirection: "column",
               height: 100,
+              backgroundColor: theme.palette.background.alt,
             }}
           >
             <Typography align="center" gutterBottom>

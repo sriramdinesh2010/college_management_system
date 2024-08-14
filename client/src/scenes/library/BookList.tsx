@@ -3,67 +3,54 @@ import { ThemeSettings } from "../../app/state/theme";
 import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import {
-  useDeleteStudentMutation,
-  useGetStudentsQuery,
-} from "./SutentApiSlice";
+import { useGetBookQuery, useDeleteBookMutation } from "./BookApiSlice";
 import { useNavigate } from "react-router-dom";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
-const NewTable = () => {
+const BookList = () => {
   const navigate = useNavigate();
   const theme = useTheme<ThemeSettings>();
 
   const handledeleteclick = (_id: string) => {
-    deleteStudent({ id: _id });
+    deleteBook({ id: _id });
   };
-  const [deleteStudent] = useDeleteStudentMutation();
+  const [deleteBook] = useDeleteBookMutation();
   const columns = [
     {
-      field: "registernumber",
-      headerName: "Reg Number",
-      flex: 0.2,
-    },
-    {
-      field: "department",
-      headerName: "Department",
-      flex: 0.2,
-    },
-    {
-      field: "course",
-      headerName: "Course",
-      flex: 0.1,
-    },
-    {
-      field: "currentsemester",
-      headerName: "Semester",
-      flex: 0.2,
-    },
-    {
-      field: "firstname",
-      headerName: "First Name",
+      field: "accessnumber",
+      headerName: "Accessnumber",
       flex: 0.3,
     },
     {
-      field: "lastname",
-      headerName: "Intial",
-      flex: 0.1,
-    },
-    {
-      field: "phone",
-      headerName: "Phone Number",
+      field: "isbn_number",
+      headerName: "ISBN Number",
       flex: 0.3,
     },
     {
-      field: "email",
-      headerName: "Email",
+      field: "title",
+      headerName: "Title",
+      flex: 0.4,
+    },
+    {
+      field: "author",
+      headerName: "Author",
+      flex: 0.3,
+    },
+    {
+      field: "ddcnumber",
+      headerName: "DDC Number",
+      flex: 0.3,
+    },
+    {
+      field: "oclcnumber",
+      headerName: "OCLC Number",
       flex: 0.3,
     },
     {
       field: "update",
       headerName: "Update",
       Sorting: null,
-      flex: 0.3,
+      flex: 0.4,
       renderCell: (_params: GridRenderCellParams) => (
         <Button
           color="secondary"
@@ -81,7 +68,7 @@ const NewTable = () => {
     {
       field: "delete",
       headerName: "Delete",
-      flex: 0.3,
+      flex: 0.4,
       renderCell: (params: GridRenderCellParams) => (
         <Button
           color="secondary"
@@ -97,14 +84,11 @@ const NewTable = () => {
   ];
 
   //data from react-quary
-  const { data: students, isLoading } = useGetStudentsQuery(
-    "ReactRTkQuaryList",
-    {
-      pollingInterval: 15000,
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { data: books, isLoading } = useGetBookQuery("ReactRTkQuaryList", {
+    pollingInterval: 15000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
   if (isLoading) {
     return <ScaleLoader />;
   }
@@ -112,6 +96,7 @@ const NewTable = () => {
   return (
     <Box
       m="1.5rem 2.5rem"
+      width="750px"
       sx={{
         "& .MuiDataGrid-root": {
           border: "none",
@@ -138,13 +123,13 @@ const NewTable = () => {
       }}
     >
       <DataGrid
-        loading={isLoading || !students}
+        loading={isLoading || !books}
         getRowId={(row) => row._id}
-        rows={students || []}
+        rows={books || []}
         columns={columns}
       />
     </Box>
   );
 };
 
-export default NewTable;
+export default BookList;

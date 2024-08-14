@@ -1,6 +1,4 @@
 export default interface Student {
-  status: Number;
-  message: String;
   image: String;
   registernumber: Number;
   firstname: String;

@@ -1,62 +1,44 @@
-import { Box, Button, useTheme } from "@mui/material";
-import { ThemeSettings } from "../../app/state/theme";
-import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import {
-  useDeleteStudentMutation,
-  useGetStudentsQuery,
-} from "./SutentApiSlice";
-import { useNavigate } from "react-router-dom";
-import ScaleLoader from "react-spinners/ScaleLoader";
-
-const NewTable = () => {
-  const navigate = useNavigate();
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { Box, Button, useTheme } from "@mui/material";
+import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
+import { ThemeSettings } from "../../app/state/theme";
+import useNote from "../../hooks/useNote";
+import StudentListSkeleton from "../../skeleton/StudentListSkeleton";
+import Header from "../../components/Header";
+const NotesList = () => {
   const theme = useTheme<ThemeSettings>();
 
   const handledeleteclick = (_id: string) => {
-    deleteStudent({ id: _id });
+    console.log(_id);
   };
-  const [deleteStudent] = useDeleteStudentMutation();
+  const handleupdateclick = (_id: string) => {
+    console.log(_id);
+  };
   const columns = [
     {
-      field: "registernumber",
-      headerName: "Reg Number",
+      field: "noteId",
+      headerName: "NoteID",
       flex: 0.2,
     },
     {
-      field: "department",
-      headerName: "Department",
+      field: "title",
+      headerName: "Title",
       flex: 0.2,
     },
     {
-      field: "course",
-      headerName: "Course",
+      field: "description",
+      headerName: "Description",
       flex: 0.1,
     },
     {
-      field: "currentsemester",
-      headerName: "Semester",
+      field: "viewfor",
+      headerName: "view for",
       flex: 0.2,
     },
     {
-      field: "firstname",
-      headerName: "First Name",
-      flex: 0.3,
-    },
-    {
-      field: "lastname",
-      headerName: "Intial",
-      flex: 0.1,
-    },
-    {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 0.3,
-    },
-    {
-      field: "email",
-      headerName: "Email",
+      field: "publishdate",
+      headerName: "Publish Date	",
       flex: 0.3,
     },
     {
@@ -64,15 +46,13 @@ const NewTable = () => {
       headerName: "Update",
       Sorting: null,
       flex: 0.3,
-      renderCell: (_params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Button
           color="secondary"
           size="small"
           variant="contained"
           startIcon={<EditOutlinedIcon />}
-          onClick={() => {
-            navigate("/editStudent");
-          }}
+          onClick={() => handleupdateclick(params.row._id)}
         >
           Update
         </Button>
@@ -96,19 +76,10 @@ const NewTable = () => {
     },
   ];
 
-  //data from react-quary
-  const { data: students, isLoading } = useGetStudentsQuery(
-    "ReactRTkQuaryList",
-    {
-      pollingInterval: 15000,
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true,
-    }
-  );
-  if (isLoading) {
-    return <ScaleLoader />;
-  }
-  //this is return table
+  const { data, isLoading, error } = useNote();
+  if (isLoading) return <StudentListSkeleton />;
+  if (error) return "error";
+
   return (
     <Box
       m="1.5rem 2.5rem"
@@ -137,14 +108,15 @@ const NewTable = () => {
         },
       }}
     >
+      <Header title={"Note List"} subtitle="All Note heare" />
       <DataGrid
-        loading={isLoading || !students}
+        loading={isLoading || !data}
         getRowId={(row) => row._id}
-        rows={students || []}
+        rows={data || []}
         columns={columns}
       />
     </Box>
   );
 };
 
-export default NewTable;
+export default NotesList;

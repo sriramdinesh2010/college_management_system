@@ -22,6 +22,7 @@ import FlexBetween from "./FlexBetween";
 import profileImage from "../assets/profile.jpeg";
 import { ThemeSettings } from "../app/state/theme";
 import { navItems } from "../data/Navitem";
+// import Logo from "../../src/assets/logo.svg";
 
 interface SidebarProps {
   drawerWidth: string | number;
@@ -68,8 +69,8 @@ const Sidebar = ({
             <Box m="1.5rem 2rem 2rem 3rem">
               <FlexBetween color={theme.palette.secondary.main}>
                 <Box display="flex" alignItems="center" gap="0.5rem">
-                  <Typography variant="h4" fontWeight="bold">
-                    Sriram College Of Arts and Science
+                  <Typography variant="h5">
+                    Sriram College of Arts and Science
                   </Typography>
                 </Box>
                 {!isNonMobile && (
@@ -110,7 +111,7 @@ const Sidebar = ({
                     >
                       <ListItemIcon
                         sx={{
-                          ml: "2rem",
+                          ml: "1rem",
                           color:
                             active === lcText
                               ? theme.palette.primary[600]
@@ -129,7 +130,6 @@ const Sidebar = ({
               })}
             </List>
           </Box>
-
           <Box bottom="2rem">
             <Divider />
             <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 3rem">
