@@ -3,18 +3,18 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Box, Button, useTheme } from "@mui/material";
 import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 import { ThemeSettings } from "../../app/state/theme";
-import useNote from "../../hooks/useNote";
 import StudentListSkeleton from "../../skeleton/StudentListSkeleton";
-import Header from "../../components/Header";
+import { useDeleteNoteMutation, useGetNotesQuery } from "./NoteApiSlice";
 const NotesList = () => {
   const theme = useTheme<ThemeSettings>();
 
   const handledeleteclick = (_id: string) => {
-    console.log(_id);
+    deleteNote({ id: _id });
   };
   const handleupdateclick = (_id: string) => {
     console.log(_id);
   };
+  const [deleteNote] = useDeleteNoteMutation();
   const columns = [
     {
       field: "noteId",
@@ -24,12 +24,12 @@ const NotesList = () => {
     {
       field: "title",
       headerName: "Title",
-      flex: 0.2,
+      flex: 0.5,
     },
     {
       field: "description",
       headerName: "Description",
-      flex: 0.1,
+      flex: 1,
     },
     {
       field: "viewfor",
@@ -76,13 +76,18 @@ const NotesList = () => {
     },
   ];
 
-  const { data, isLoading, error } = useNote();
+  const {
+    data: notes,
+    isLoading,
+    error,
+  } = useGetNotesQuery("ReactRTkQuaryList", {
+    pollingInterval: 300000,
+  });
   if (isLoading) return <StudentListSkeleton />;
   if (error) return "error";
 
   return (
     <Box
-      m="1.5rem 2.5rem"
       sx={{
         "& .MuiDataGrid-root": {
           border: "none",
@@ -108,11 +113,10 @@ const NotesList = () => {
         },
       }}
     >
-      <Header title={"Note List"} subtitle="All Note heare" />
       <DataGrid
-        loading={isLoading || !data}
+        loading={isLoading || !notes}
         getRowId={(row) => row._id}
-        rows={data || []}
+        rows={notes || []}
         columns={columns}
       />
     </Box>

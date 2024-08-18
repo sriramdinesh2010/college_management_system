@@ -22,6 +22,7 @@ import FlexBetween from "./FlexBetween";
 import profileImage from "../assets/profile.jpeg";
 import { ThemeSettings } from "../app/state/theme";
 import { navItems } from "../data/Navitem";
+import useAuth from "../hooks/useAuth";
 // import Logo from "../../src/assets/logo.svg";
 
 interface SidebarProps {
@@ -41,7 +42,7 @@ const Sidebar = ({
   const [active, setActive] = useState("");
   const navigate = useNavigate();
   const theme = useTheme<ThemeSettings>();
-
+  const { roles } = useAuth();
   useEffect(() => {
     setActive(pathname.substring(1));
   }, [pathname]);
@@ -132,7 +133,11 @@ const Sidebar = ({
           </Box>
           <Box bottom="2rem">
             <Divider />
-            <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 3rem">
+            <FlexBetween
+              textTransform="none"
+              gap="1rem"
+              m="1.5rem 2rem 1rem 3rem"
+            >
               <Box
                 component="img"
                 alt="profile"
@@ -144,17 +149,10 @@ const Sidebar = ({
               />
               <Box textAlign="left">
                 <Typography
-                  fontWeight="bold"
-                  fontSize="0.9rem"
-                  sx={{ color: theme.palette.secondary[100] }}
-                >
-                  sriram
-                </Typography>
-                <Typography
                   fontSize="0.8rem"
                   sx={{ color: theme.palette.secondary[200] }}
                 >
-                  admin
+                  {roles[0]}
                 </Typography>
               </Box>
               <SettingsOutlined

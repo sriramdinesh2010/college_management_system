@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface GlobalState {
+  mode: "light" | "dark";
+}
+
+const initialState: GlobalState = {
   mode: "dark",
 };
 export const globalSlice = createSlice({

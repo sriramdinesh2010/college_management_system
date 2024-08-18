@@ -4,10 +4,9 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { themeSettings } from "./app/state/theme";
 import { RootState } from "./app/store";
-import Layout from "./scenes/layout";
 import DashHome from "./scenes/Dashboard/DashHome";
 import CreateStudent from "./scenes/student/CreateStudent";
 import StudentList from "./scenes/student/StudentList";
@@ -19,6 +18,9 @@ import Notification from "./scenes/notification/Notification";
 import Hostel from "./scenes/hostel/Hostel";
 import Subject from "./scenes/subject/Subject";
 import EditStudent from "./scenes/student/EditStudent";
+import Login from "./scenes/Login/Login";
+import SearchStudent from "./scenes/student/SearchStudent";
+import PersistLogin from "./scenes/Login/PersistLogin";
 const queryClient = new QueryClient();
 const App = () => {
   const mode = useSelector((state: RootState) => state.global.mode);
@@ -30,12 +32,13 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<Login />} />
+            <Route element={<PersistLogin />}>
               <Route path="/dashboard" element={<DashHome />} />
               <Route path="/createstudent" element={<CreateStudent />} />
+              <Route path="/searchstudent" element={<SearchStudent />} />
               <Route path="/studentlist" element={<StudentList />} />
-              <Route path="/createemployee" element={<Employee />} />
+              <Route path="/employee" element={<Employee />} />
               <Route path="/editStudent" element={<EditStudent />} />
               <Route path="/department" element={<Department />} />
               <Route path="/subject" element={<Subject />} />

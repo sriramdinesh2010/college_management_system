@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   LightModeOutlined,
   DarkModeOutlined,
@@ -24,6 +24,9 @@ import {
 } from "@mui/material";
 import { ThemeSettings } from "../app/state/theme";
 import { BiMenuAltLeft } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
+import { useSendLogoutMutation } from "../scenes/Login/authApiSlice";
+import useAuth from "../hooks/useAuth";
 
 interface NavbarProps {
   isSidebarOpen: boolean;
@@ -32,13 +35,22 @@ interface NavbarProps {
 
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const theme = useTheme<ThemeSettings>();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
   const handleClick = (event: any) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
+  const [sendLogout, { isSuccess, isError }] = useSendLogoutMutation();
 
+  if (isError) {
+    console.log(isError);
+  }
+  const { email, roles } = useAuth();
+  useEffect(() => {
+    if (isSuccess) navigate("/", { replace: true });
+  }, [isSuccess, navigate]);
   return (
     <AppBar
       sx={{
@@ -105,13 +117,13 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
                   fontSize="0.85rem"
                   sx={{ color: theme.palette.secondary[100] }}
                 >
-                  sriram
+                  {email}
                 </Typography>
                 <Typography
                   fontSize="0.75rem"
                   sx={{ color: theme.palette.secondary[200] }}
                 >
-                  admin
+                  {roles[0]}
                 </Typography>
               </Box>
               <ArrowDropDownOutlined
@@ -124,7 +136,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
               onClose={handleClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
-              <MenuItem onClick={handleClose}>Log Out</MenuItem>
+              <MenuItem onClick={() => sendLogout()}>Log Out</MenuItem>
             </Menu>
           </FlexBetween>
         </FlexBetween>

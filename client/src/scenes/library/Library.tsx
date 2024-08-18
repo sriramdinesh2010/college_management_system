@@ -9,7 +9,8 @@ import { IoIosReturnRight } from "react-icons/io";
 import { ThemeSettings } from "../../app/state/theme";
 import { useTheme } from "@mui/material";
 import NewBookRegister from "./NewBookRegister";
-import BookList from "./BookList";
+import BookCard from "./BookCard";
+import GetBookReg from "./GetBookReg";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -108,10 +109,15 @@ export default function Library() {
         Item Two
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <BookList />
+        <BookCard
+          title="hello"
+          author="hello"
+          coverImage="hello"
+          description="hello"
+        />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <GetBookReg />
       </TabPanel>
       <TabPanel value={value} index={4}>
         Item five

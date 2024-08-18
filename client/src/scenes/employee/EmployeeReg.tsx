@@ -11,11 +11,11 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { ThemeSettings } from "../../app/state/theme";
+import { useAddNewEmployeeMutation } from "./EmployeeSlice";
 
 const MAX_FILE_SIZE = 9000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -83,8 +83,8 @@ const EmpolyeeReg = () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
   //set error message
   const [message, setmessage] = useState("");
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const [addNewEmployee] = useAddNewEmployeeMutation();
+  const onSubmit = async (data: FieldValues) => {
     const formData = new FormData();
     formData.append("image", data.image[0]);
     formData.append("registernumber", data.registernumber);
@@ -104,13 +104,15 @@ const EmpolyeeReg = () => {
     formData.append("department", data.department);
     formData.append("role", data.role);
     formData.append("joiningdate", data.joiningdate);
-
-    console.log(formData);
-    axios
-      .post("http://localhost:5000/employee", formData)
-      .then((res) => setmessage(res.data.message));
-    setOpen(true);
-    reset();
+    const result = await addNewEmployee(formData).unwrap();
+    try {
+      setmessage(result.message);
+      setOpen(true);
+      reset();
+    } catch (error) {
+      setmessage(result.data.message);
+      setOpen(true);
+    }
   };
   const [open, setOpen] = useState(false);
   const handleClose = (

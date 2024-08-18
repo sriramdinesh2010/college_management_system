@@ -1,20 +1,23 @@
 import { Box, Button, useTheme } from "@mui/material";
 import { ThemeSettings } from "../../app/state/theme";
-import useEmployee from "../../hooks/useEmployee";
 import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import {
+  useDeleteEmployeeMutation,
+  useGetEmployeeQuery,
+} from "./EmployeeSlice";
 
 export default function BasicTable() {
   const theme = useTheme<ThemeSettings>();
 
   //data from react-quary
-  const { data, isLoading, error } = useEmployee();
-
+  const { data, isLoading, error } = useGetEmployeeQuery("");
+  const [deleteEmployee] = useDeleteEmployeeMutation();
   if (isLoading) return "loding...";
   if (error) return "error";
   const handledeleteclick = (_id: string) => {
-    console.log(_id);
+    deleteEmployee({ id: _id });
   };
   const handleupdateclick = (_id: string) => {
     console.log(_id);

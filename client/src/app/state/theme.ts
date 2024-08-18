@@ -81,9 +81,9 @@ export const tokensLight: Tokens = reverseTokens(tokensDark);
 
 export interface ThemeSettings {
   palette: {
-    mode: any;
+    mode: "light" | "dark";
     primary: ColorShades & { main: string; light: string };
-    secondary: ColorShades & { main: string; light?: string };
+    secondary: ColorShades & { main: string; light: string };
     neutral: ColorShades & { main: string };
     background: {
       default: string;
@@ -103,7 +103,7 @@ export interface ThemeSettings {
 }
 
 // mui theme settings
-export const themeSettings = (mode: any): ThemeSettings => {
+export const themeSettings = (mode: "light" | "dark"): ThemeSettings => {
   return {
     palette: {
       mode: mode,
@@ -118,6 +118,7 @@ export const themeSettings = (mode: any): ThemeSettings => {
             secondary: {
               ...tokensDark.secondary,
               main: tokensDark.secondary[300],
+              light: tokensDark.secondary[200], // Added light property
             },
             neutral: {
               ...tokensDark.grey,
@@ -146,7 +147,7 @@ export const themeSettings = (mode: any): ThemeSettings => {
             },
             background: {
               default: tokensDark.grey[0],
-              alt: tokensDark.grey[50],
+              alt: tokensDark.grey[10],
             },
           }),
     },

@@ -19,7 +19,6 @@ import { z } from "zod";
 import Header from "../../components/Header";
 import { ThemeSettings } from "../../app/state/theme";
 import { useAddNewStudentMutation } from "./SutentApiSlice";
-
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
@@ -74,7 +73,7 @@ const schema = z.object({
   department: z.string().min(1, { message: "Department is requried" }),
   currentsemester: z
     .string()
-    .min(1, { message: "current semester is required" }),
+    .min(1, { message: "Current Semester  is requried" }),
   joiningdate: z.string().pipe(z.coerce.date()),
 });
 type FormData = z.infer<typeof schema>;
@@ -144,10 +143,7 @@ const StudentReg = () => {
           backgroundColor: theme.palette.background.alt,
         }}
       >
-        <Header
-          title={"Create Student"}
-          subtitle={"Student Registration Form"}
-        />
+        <Header title={""} subtitle={"Student Registration Form"} />
         <Snackbar
           open={open}
           autoHideDuration={5000}
@@ -159,7 +155,7 @@ const StudentReg = () => {
           </Alert>
         </Snackbar>
         <br></br>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <Typography variant="h6" gutterBottom>
             1. Personal Details
           </Typography>
@@ -176,12 +172,8 @@ const StudentReg = () => {
                 name="image"
                 error={!!errors.image}
                 component="label"
+                helperText={errors.image?.message?.toString()}
               />
-              {errors.image && (
-                <Typography color="error">
-                  {errors.image?.message?.toString()}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.registernumber}>
@@ -194,12 +186,8 @@ const StudentReg = () => {
                 type="number"
                 error={!!errors.registernumber}
                 name="registernumber"
+                helperText={errors.registernumber?.message}
               />
-              {errors.registernumber && (
-                <Typography color="error">
-                  {errors.registernumber.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.firstname}>
@@ -212,12 +200,8 @@ const StudentReg = () => {
                 error={!!errors.firstname}
                 type="text"
                 name="firstname"
+                helperText={errors.firstname?.message}
               />
-              {errors.firstname && (
-                <Typography color="error">
-                  {errors.firstname.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.lastname}>
@@ -230,10 +214,8 @@ const StudentReg = () => {
                 fullWidth
                 error={!!errors.lastname}
                 name="lastname"
+                helperText={errors.lastname?.message}
               />
-              {errors.lastname && (
-                <Typography color="error">{errors.lastname.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.gender}>
@@ -265,12 +247,8 @@ const StudentReg = () => {
                 type="text"
                 name="fathername"
                 error={!!errors.fathername}
+                helperText={errors.fathername?.message}
               />
-              {errors.fathername && (
-                <Typography color="error">
-                  {errors.fathername.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.mothername}>
@@ -283,12 +261,8 @@ const StudentReg = () => {
                 type="text"
                 name="mothername"
                 error={!!errors.mothername}
+                helperText={errors.mothername?.message}
               />
-              {errors.mothername && (
-                <Typography color="error">
-                  {errors.mothername.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.dob}>
@@ -301,10 +275,8 @@ const StudentReg = () => {
                 type="date"
                 name="dob"
                 error={!!errors.dob}
+                helperText={errors.dob?.message}
               />
-              {errors.dob && (
-                <Typography color="error">{errors.dob.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.bloodgroup}>
@@ -317,12 +289,8 @@ const StudentReg = () => {
                 type="text"
                 error={!!errors.bloodgroup}
                 name="bloodgroup"
+                helperText={errors.bloodgroup?.message}
               />
-              {errors.bloodgroup && (
-                <Typography color="error">
-                  {errors.bloodgroup.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.phone}>
@@ -336,10 +304,8 @@ const StudentReg = () => {
                 name="phone"
                 autoComplete="on"
                 error={!!errors.phone}
+                helperText={errors.phone?.message}
               />
-              {errors.phone && (
-                <Typography color="error">{errors.phone.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.email}>
@@ -353,10 +319,8 @@ const StudentReg = () => {
                 name="email"
                 autoComplete="on"
                 error={!!errors.email}
+                helperText={errors.email?.message}
               />
-              {errors.email && (
-                <Typography color="error">{errors.email.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.address}>
@@ -370,10 +334,8 @@ const StudentReg = () => {
                 name="address"
                 autoComplete="on"
                 error={!!errors.address}
+                helperText={errors.address?.message}
               />
-              {errors.address && (
-                <Typography color="error">{errors.address.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.city}>
@@ -386,10 +348,8 @@ const StudentReg = () => {
                 type="text"
                 name="city"
                 error={!!errors.city}
+                helperText={errors.city?.message}
               />
-              {errors.city && (
-                <Typography color="error">{errors.city.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.state}>
@@ -402,10 +362,8 @@ const StudentReg = () => {
                 type="text"
                 name="state"
                 error={!!errors.state}
+                helperText={errors.state?.message}
               />
-              {errors.state && (
-                <Typography color="error">{errors.state.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.country}>
@@ -419,10 +377,8 @@ const StudentReg = () => {
                 name="country"
                 error={!!errors.country}
                 autoComplete="on"
+                helperText={errors.country?.message}
               />
-              {errors.country && (
-                <Typography color="error">{errors.country.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={12} lg={12} xl={12}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
@@ -483,12 +439,8 @@ const StudentReg = () => {
                 type="text"
                 name="department"
                 error={!!errors.department}
+                helperText={errors.department?.message}
               />
-              {errors.department && (
-                <Typography color="error">
-                  {errors.department.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.currentsemester}>
@@ -501,12 +453,8 @@ const StudentReg = () => {
                 type="text"
                 name="currentsemester"
                 error={!!errors.currentsemester}
+                helperText={errors.currentsemester?.message}
               />
-              {errors.currentsemester && (
-                <Typography color="error">
-                  {errors.currentsemester.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.joiningdate}>
@@ -519,12 +467,8 @@ const StudentReg = () => {
                 type="date"
                 name="joiningdate"
                 error={!!errors.joiningdate}
+                helperText={errors.joiningdate?.message}
               />
-              {errors.joiningdate && (
-                <Typography color="error">
-                  {errors.joiningdate.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={12} lg={12} xl={12}>
               <Button variant="outlined" color="inherit" type="submit">

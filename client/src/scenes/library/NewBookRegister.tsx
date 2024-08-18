@@ -6,12 +6,12 @@ import {
   InputLabel,
   Snackbar,
   TextField,
-  Typography,
 } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAddNewBookMutation } from "./BookApiSlice";
+
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
@@ -23,7 +23,9 @@ const schema = z.object({
   image: z
     .any()
     // To not allow empty files
-    .refine((files) => files?.length >= 1, { message: "Image is required." })
+    .refine((files) => files?.length >= 1, {
+      message: "Cover Image  is required.",
+    })
     // To not allow files other than images
     .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
       message: ".jpg, .jpeg, .png and .webp files are accepted.",
@@ -33,25 +35,24 @@ const schema = z.object({
       message: `Max file size is 5MB.`,
     }),
   accessnumber: z
-    .number({ message: "Access Number is requried" })
+    .string({ message: "Access Number is requried" })
     .min(1, { message: "Access Number is requried" })
     .max(9, { message: "Access Number contain 9 Number" }),
   isbn: z
-    .number({ message: "ISBN is a number" })
-    .min(1, { message: "ISBN is required" })
-    .max(13, { message: "enter valid isbn number" }),
+    .string({ message: "ISBN is requried" })
+    .min(1, { message: "ISBN is required" }),
   callnumber: z
     .string({ message: "Call Number is required" })
     .min(2, { message: "Call Number is required" }),
   ddcnumber: z
     .string({ message: "DCC Number is required" })
     .min(1, { message: "DCC Number is required" }),
-  oclcnumber: z.number().min(2).max(10),
-  lccnumber: z.number().min(2).max(10),
+  oclcnumber: z.string().min(2),
+  lccnumber: z.string().min(2),
   title: z.string().min(1, { message: "Tittle is required" }),
   author: z.string().min(1, { message: "Author Name  is required" }),
   publisher: z.string().min(1, { message: "Publisher Name is required" }),
-  barcode: z.number().min(2).max(10),
+  barcode: z.string().min(2).max(10),
 });
 type FormData = z.infer<typeof schema>;
 
@@ -64,16 +65,9 @@ const NewBookRegister = () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
   const [message, setmessage] = useState("");
   // sumbit handler
-  const onSubmit = (data: FieldValues) => {
+  const [addNewBook] = useAddNewBookMutation();
+  const onBookSubmit = (data: FieldValues) => {
     console.log(data);
-    const formData = new FormData();
-
-    console.log(formData);
-
-    axios
-      .post("http://localhost:5000/book", formData)
-      .then((res) => setmessage(res.data.message));
-    setOpen(true);
     reset();
   };
   const [open, setOpen] = useState(false);
@@ -96,7 +90,7 @@ const NewBookRegister = () => {
           onClose={handleClose}
           message={message}
         />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onBookSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} md={4} lg={6} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.image}>
@@ -110,12 +104,8 @@ const NewBookRegister = () => {
                 name="image"
                 error={!!errors.image}
                 component="label"
+                helperText={errors.image?.message?.toString()}
               />
-              {errors.image && (
-                <Typography color="error">
-                  {errors.image?.message?.toString()}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={4} lg={6} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.accessnumber}>
@@ -125,16 +115,12 @@ const NewBookRegister = () => {
                 {...register("accessnumber")}
                 variant="outlined"
                 fullWidth
-                type="number"
+                type="text"
                 name="accessnumber"
                 autoComplete="on"
                 error={!!errors.accessnumber}
+                helperText={errors.accessnumber?.message}
               />
-              {errors.accessnumber && (
-                <Typography color="error">
-                  {errors.accessnumber.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={4} lg={6} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.isbn}>
@@ -144,14 +130,12 @@ const NewBookRegister = () => {
                 {...register("isbn")}
                 variant="outlined"
                 fullWidth
-                type="number"
+                type="text"
                 name="isbn"
                 autoComplete="on"
                 error={!!errors.isbn}
+                helperText={errors.isbn?.message}
               />
-              {errors.isbn && (
-                <Typography color="error">{errors.isbn.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={4} lg={6} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.callnumber}>
@@ -165,12 +149,8 @@ const NewBookRegister = () => {
                 name="callnumber"
                 autoComplete="on"
                 error={!!errors.callnumber}
+                helperText={errors.callnumber?.message}
               />
-              {errors.callnumber && (
-                <Typography color="error">
-                  {errors.callnumber.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={4} lg={6} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.ddcnumber}>
@@ -184,12 +164,8 @@ const NewBookRegister = () => {
                 name="ddcnumber"
                 autoComplete="on"
                 error={!!errors.ddcnumber}
+                helperText={errors.ddcnumber?.message}
               />
-              {errors.ddcnumber && (
-                <Typography color="error">
-                  {errors.ddcnumber.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={4} lg={6} xl={6}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.oclcnumber}>
@@ -199,16 +175,12 @@ const NewBookRegister = () => {
                 {...register("oclcnumber")}
                 variant="outlined"
                 fullWidth
-                type="number"
+                type="text"
                 name="oclcnumber"
                 autoComplete="on"
                 error={!!errors.oclcnumber}
+                helperText={errors.oclcnumber?.message}
               />
-              {errors.oclcnumber && (
-                <Typography color="error">
-                  {errors.oclcnumber.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={4} lg={6} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.title}>
@@ -222,10 +194,8 @@ const NewBookRegister = () => {
                 name="title"
                 autoComplete="on"
                 error={!!errors.title}
+                helperText={errors.title?.message}
               />
-              {errors.title && (
-                <Typography color="error">{errors.title.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={4} lg={6} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.author}>
@@ -239,10 +209,8 @@ const NewBookRegister = () => {
                 name="author"
                 autoComplete="on"
                 error={!!errors.author}
+                helperText={errors.author?.message}
               />
-              {errors.author && (
-                <Typography color="error">{errors.author.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={4} lg={6} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.publisher}>
@@ -256,12 +224,8 @@ const NewBookRegister = () => {
                 name="publisher"
                 autoComplete="on"
                 error={!!errors.publisher}
+                helperText={errors.publisher?.message}
               />
-              {errors.publisher && (
-                <Typography color="error">
-                  {errors.publisher.message}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={4} lg={6} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.barcode}>
@@ -271,14 +235,12 @@ const NewBookRegister = () => {
                 {...register("barcode")}
                 variant="outlined"
                 fullWidth
-                type="number"
+                type="text"
                 name="barcode"
                 autoComplete="on"
                 error={!!errors.barcode}
+                helperText={errors.barcode?.message}
               />
-              {errors.barcode && (
-                <Typography color="error">{errors.barcode.message}</Typography>
-              )}
             </Grid>
             <Grid item xs={12} md={12} lg={12} xl={12}>
               <Button variant="contained" type="submit">

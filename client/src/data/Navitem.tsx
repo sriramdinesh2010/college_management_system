@@ -1,55 +1,62 @@
-import { FaListUl, FaSearch } from "react-icons/fa";
-import { FaBuildingColumns } from "react-icons/fa6";
-import { HiOutlineBuildingOffice } from "react-icons/hi2";
-import { IoLibrarySharp, IoNotificationsCircleOutline } from "react-icons/io5";
-import { PiChalkboardTeacherDuotone, PiStudentFill } from "react-icons/pi";
-import { RxDashboard } from "react-icons/rx";
-import { TbNotes } from "react-icons/tb";
-import { MdOutlineSubject } from "react-icons/md";
-
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import HotelIcon from "@mui/icons-material/Hotel";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import BadgeIcon from "@mui/icons-material/Badge";
+import SearchIcon from "@mui/icons-material/Search";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import SubjectIcon from "@mui/icons-material/Subject";
 export const navItems = [
   {
     text: "Dashboard",
-    icon: <RxDashboard fontSize="medium" />,
+    icon: <DashboardIcon />,
   },
   {
     text: "CreateStudent",
-    icon: <PiStudentFill fontSize={23} />,
+    icon: <AddCircleOutlineIcon />,
   },
   {
-    text: "studentlist",
-    icon: <FaListUl fontSize={23} />,
+    text: "StudentList",
+    icon: <FormatListBulletedIcon />,
   },
   {
     text: "SearchStudent",
-    icon: <FaSearch fontSize={23} />,
+    icon: <SearchIcon />,
   },
   {
-    text: "createemployee",
-    icon: <PiChalkboardTeacherDuotone fontSize={23} />,
+    text: "Employee",
+    icon: <BadgeIcon />,
   },
   {
-    text: "department",
-    icon: <FaBuildingColumns fontSize={23} />,
+    text: "Department",
+    icon: <ApartmentIcon />,
   },
   {
     text: "Subject",
-    icon: <MdOutlineSubject fontSize={23} />,
+    icon: <SubjectIcon />,
   },
   {
     text: "Library",
-    icon: <IoLibrarySharp fontSize={23} />,
+    icon: <LibraryBooksIcon />,
   },
   {
     text: "Hostel",
-    icon: <HiOutlineBuildingOffice fontSize={23} />,
+    icon: <HotelIcon />,
   },
   {
     text: "Notes",
-    icon: <TbNotes fontSize={23} />,
+    icon: <EditNoteIcon />,
   },
   {
     text: "Notification",
-    icon: <IoNotificationsCircleOutline fontSize={23} />,
+    icon: <CircleNotificationsIcon />,
+  },
+  {
+    text: "AddAdmin",
+    icon: <AdminPanelSettingsIcon />,
   },
 ];

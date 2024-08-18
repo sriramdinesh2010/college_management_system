@@ -11,12 +11,12 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { ThemeSettings } from "../../app/state/theme";
 import Header from "../../components/Header";
+import { useAddNewNoteMutation } from "./NoteApiSlice";
 
 const schema = z.object({
   title: z
@@ -41,8 +41,8 @@ const NotesReg = () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const [message, setmessage] = useState("");
-
-  const onSubmit = (data: FieldValues) => {
+  const [addNewNote] = useAddNewNoteMutation();
+  const onSubmit = async (data: FieldValues) => {
     const noteId = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
     const noteobject = {
       noteId: noteId,
@@ -51,15 +51,15 @@ const NotesReg = () => {
       viewfor: data.viewfor,
       publishdate: data.publishdate,
     };
-    axios
-      .post("http://localhost:5000/notes", noteobject, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => setmessage(res.data.message));
-    setOpen(true);
-    reset();
+    const result = await addNewNote(noteobject).unwrap();
+    try {
+      setmessage(result.message);
+      setOpen(true);
+      reset();
+    } catch (err) {
+      setmessage(result.message);
+      setOpen(true);
+    }
   };
   const [open, setOpen] = useState(false);
   const handleClose = (
@@ -102,10 +102,8 @@ const NotesReg = () => {
               type="text"
               error={!!errors.title}
               name="title"
+              helperText={errors.title?.message}
             />
-            {errors.title && (
-              <Typography color="error">{errors.title.message}</Typography>
-            )}
           </Grid>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <InputLabel sx={{ mb: 1 }} error={!!errors.description}>
@@ -121,12 +119,8 @@ const NotesReg = () => {
               type="text"
               error={!!errors.description}
               name="description"
+              helperText={errors.description?.message}
             />
-            {errors.description && (
-              <Typography color="error">
-                {errors.description.message}
-              </Typography>
-            )}
           </Grid>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <InputLabel sx={{ mb: 1 }} error={!!errors.viewfor}>
@@ -158,12 +152,8 @@ const NotesReg = () => {
               type="date"
               name="publishdate"
               error={!!errors.publishdate}
+              helperText={errors.publishdate?.message}
             />
-            {errors.publishdate && (
-              <Typography color="error">
-                {errors.publishdate.message}
-              </Typography>
-            )}
           </Grid>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Button variant="contained" type="submit">

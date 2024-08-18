@@ -9,10 +9,17 @@ import {
 } from "./SutentApiSlice";
 import { useNavigate } from "react-router-dom";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import { CSSProperties } from "react";
 
 const NewTable = () => {
-  const navigate = useNavigate();
   const theme = useTheme<ThemeSettings>();
+  const override: CSSProperties = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: theme.palette.secondary.main,
+  };
+  const navigate = useNavigate();
 
   const handledeleteclick = (_id: string) => {
     deleteStudent({ id: _id });
@@ -62,16 +69,16 @@ const NewTable = () => {
     {
       field: "update",
       headerName: "Update",
-      Sorting: null,
+      sortable: false,
       flex: 0.3,
-      renderCell: (_params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Button
           color="secondary"
           size="small"
           variant="contained"
           startIcon={<EditOutlinedIcon />}
           onClick={() => {
-            navigate("/editStudent");
+            navigate("/editStudent", { state: { studendata: params.row } });
           }}
         >
           Update
@@ -100,13 +107,11 @@ const NewTable = () => {
   const { data: students, isLoading } = useGetStudentsQuery(
     "ReactRTkQuaryList",
     {
-      pollingInterval: 15000,
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true,
+      pollingInterval: 300000,
     }
   );
   if (isLoading) {
-    return <ScaleLoader />;
+    return <ScaleLoader cssOverride={override} />;
   }
   //this is return table
   return (
