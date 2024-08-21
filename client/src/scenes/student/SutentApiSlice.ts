@@ -8,6 +8,16 @@ export const StudentsApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["Student"],
     }),
+
+    SingleStudent: builder.query({
+      query: (registernumber) => ({
+        url: "/student/singlestudent",
+        method: "POST",
+        body: registernumber,
+      }),
+      providesTags: ["SingleStudent"],
+    }),
+
     addNewStudent: builder.mutation({
       query: (formData) => ({
         url: "/student",
@@ -39,6 +49,7 @@ export const StudentsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetStudentsQuery,
+  useSingleStudentQuery,
   useAddNewStudentMutation,
   useUpdateStudentMutation,
   useDeleteStudentMutation,

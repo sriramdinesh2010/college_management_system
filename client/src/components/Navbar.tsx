@@ -43,14 +43,20 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
   const handleClick = (event: any) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
   const [sendLogout, { isSuccess, isError }] = useSendLogoutMutation();
+  const { email, roles } = useAuth();
+
+  useEffect(() => {
+    console.log("enter useeffect");
+    if (isSuccess) {
+      localStorage.removeItem("persist");
+      navigate("/");
+    }
+  }, [isSuccess, navigate]);
 
   if (isError) {
     console.log(isError);
   }
-  const { email, roles } = useAuth();
-  useEffect(() => {
-    if (isSuccess) navigate("/", { replace: true });
-  }, [isSuccess, navigate]);
+
   return (
     <AppBar
       sx={{

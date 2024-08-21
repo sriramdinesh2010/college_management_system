@@ -13,7 +13,7 @@ const getAllStudents = async (req, res) => {
 };
 
 const getSingleStudent = async (req, res) => {
-  const { registernumber } = req.params;
+  const { registernumber } = req.body;
   const singleStudent = await student
     .findOne({ registernumber })
     .collation({ locale: "en", strength: 2 })

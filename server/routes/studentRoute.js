@@ -11,8 +11,6 @@ router
   .post(studentController.studentRegistration)
   .delete(studentController.deleteStudent);
 
-router
-  .route("/singlestudent/:registernumber")
-  .get(studentController.getSingleStudent);
+router.route("/singlestudent").post(studentController.getSingleStudent);
 
 module.exports = router;

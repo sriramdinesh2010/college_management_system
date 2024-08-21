@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateAddmin from "./CreateAddmin";
+import AddminList from "./AddminList";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -72,7 +73,7 @@ export default function BasicTabs() {
         <CreateAddmin />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        addmin List
+        <AddminList />
       </CustomTabPanel>
     </Box>
   );

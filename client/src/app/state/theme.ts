@@ -152,30 +152,30 @@ export const themeSettings = (mode: "light" | "dark"): ThemeSettings => {
           }),
     },
     typography: {
-      fontFamily: ["Lato", "sans-serif"].join(","),
+      fontFamily: ["Roboto", "sans-serif"].join(","),
       fontSize: 12,
       h1: {
-        fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: ["Roboto", "sans-serif"].join(","),
         fontSize: 40,
       },
       h2: {
-        fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: ["Roboto", "sans-serif"].join(","),
         fontSize: 32,
       },
       h3: {
-        fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: ["Roboto", "sans-serif"].join(","),
         fontSize: 24,
       },
       h4: {
-        fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: ["Roboto", "sans-serif"].join(","),
         fontSize: 20,
       },
       h5: {
-        fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: ["Roboto", "sans-serif"].join(","),
         fontSize: 16,
       },
       h6: {
-        fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: ["Roboto", "sans-serif"].join(","),
         fontSize: 14,
       },
     },

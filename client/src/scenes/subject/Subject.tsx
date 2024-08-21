@@ -4,8 +4,6 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
-import { useTheme } from "@mui/material";
-import { ThemeSettings } from "../../app/state/theme";
 import CreateSubject from "./CreateSubject";
 
 interface TabPanelProps {
@@ -37,7 +35,6 @@ function a11yProps(index: number) {
 }
 
 export default function BasicTabs() {
-  const theme = useTheme<ThemeSettings>();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {

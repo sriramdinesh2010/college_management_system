@@ -1,22 +1,35 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, MouseEvent } from "react";
 import {
-  Box,
   Button,
   Container,
   CssBaseline,
   TextField,
   Typography,
-  Avatar,
   Alert,
+  InputLabel,
+  InputAdornment,
+  IconButton,
+  OutlinedInput,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Paper,
+  useTheme,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "./authApiSlice";
 import { setCredentials } from "./authSlice";
 import { useDispatch } from "react-redux";
-import PulseLoader from "react-spinners/PulseLoader";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import usePersist from "../../hooks/usePersist";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldValues, useForm } from "react-hook-form";
+import { ThemeSettings } from "../../app/state/theme";
+import LoginSvg from "../../assets/login_image.svg"; // Adjust the path as needed
 
+// Define the types for the API response and errors
 interface LoginResponse {
   accessToken: string;
 }
@@ -28,30 +41,68 @@ interface ErrorType {
   };
 }
 
-const Login = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+// Zod schema for form validation
+const schema = z.object({
+  email: z
+    .string({ message: "Email is required" })
+    .email({ message: "Enter a valid email address" }),
+  password: z.string().nonempty({ message: "Enter your password" }),
+});
+
+// Infer the TypeScript type for form data from the Zod schema
+type FormData = z.infer<typeof schema>;
+
+const Login: React.FC = () => {
+  // custom theme setting
+  const theme = useTheme<ThemeSettings>();
+
+  // Define state variables with types
   const [errMsg, setErrMsg] = useState<string>("");
   const [persist, setPersist] = usePersist();
 
+  //persist checkpox change function
   const handleToggle = () => setPersist((prev: boolean) => !prev);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // login api setup
   const [login, { isLoading }] = useLoginMutation();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  // password show hide setup
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+  };
+
+  //react-hook-form setup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  // form on submit
+  const onSubmit = async (data: FieldValues) => {
+    const logindata = {
+      email: data.email,
+      password: data.password,
+    };
     try {
-      const { accessToken } = (await login({
-        email,
-        password,
-      }).unwrap()) as LoginResponse;
+      const { accessToken } = (await login(
+        logindata
+      ).unwrap()) as LoginResponse;
+      // store jwt token in  auth slice
       dispatch(setCredentials({ accessToken }));
-      setEmail("");
-      setPassword("");
+      // form data reset
+      reset();
+      //user navigate after successful login
       navigate("/dashboard");
-    } catch (err: any) {
+    } catch (err: unknown) {
       const error = err as ErrorType;
       if (!error.status) {
         setErrMsg("No Server Response");
@@ -65,79 +116,125 @@ const Login = () => {
     }
   };
 
-  if (isLoading) return <PulseLoader />;
+  if (isLoading) return <ScaleLoader height={5} width={40} color="secondary" />;
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main">
       <CssBaseline />
-      <Box
+      <Typography
+        variant="h1"
+        color={"secondary"}
+        sx={{ marginTop: 2 }}
+        gutterBottom
+        align="center"
+      >
+        Sriram Collge of Arts and Science
+      </Typography>
+      <Paper
         sx={{
-          marginTop: 8,
+          marginTop: 5,
+          marginRight: 5,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          p: 3,
+          backgroundColor: theme.palette.background.alt,
+          borderRadius: 3,
+          width: "100%",
+          height: "auto",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        {errMsg && (
-          <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
-            {errMsg}
-          </Alert>
-        )}
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
-          />
-          <label htmlFor="persist" className="form__persist">
-            <input
-              type="checkbox"
-              className="form__checkbox"
-              id="persist"
-              onChange={handleToggle}
-              checked={persist}
+        <Grid container spacing={6}>
+          <Grid item xs={0} md={0} lg={6} xl={6}>
+            <img
+              src={LoginSvg}
+              alt="No Data"
+              style={{ width: "90%", height: "90%" }}
             />
-            Trust This Device
-          </label>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
-        </Box>
-      </Box>
+            <Typography align="center" color="secondary" variant="h4">
+              Admin Login
+            </Typography>
+          </Grid>
+          <Grid item xs={0} md={0} lg={6} xl={6}>
+            {errMsg && (
+              <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
+                {errMsg}
+              </Alert>
+            )}
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={12} lg={12} xl={12}>
+                  <InputLabel sx={{ mb: 1, mt: 1 }} error={!!errors.email}>
+                    Email
+                  </InputLabel>
+                  <TextField
+                    {...register("email")}
+                    fullWidth
+                    name="email"
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                  />
+                </Grid>
+                <Grid item xs={12} md={12} lg={12} xl={12}>
+                  <InputLabel sx={{ mb: 1 }} error={!!errors.password}>
+                    Password
+                  </InputLabel>
+                  <OutlinedInput
+                    {...register("password")}
+                    fullWidth
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    error={!!errors.password}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  {errors.password && (
+                    <Typography color="error">
+                      {errors.password.message}
+                    </Typography>
+                  )}
+                </Grid>
+                <Grid item xs={12} md={12} lg={12} xl={12}>
+                  <FormControlLabel
+                    value={persist}
+                    control={
+                      <Checkbox
+                        checked={persist}
+                        onChange={handleToggle}
+                        id="persist"
+                        color="secondary"
+                      />
+                    }
+                    label="Trust This Device"
+                    labelPlacement="end"
+                  />
+                </Grid>
+                <Grid item xs={12} md={12} lg={12} xl={12}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    Sign In
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Grid>
+        </Grid>
+      </Paper>
     </Container>
   );
 };

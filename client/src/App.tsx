@@ -21,6 +21,7 @@ import EditStudent from "./scenes/student/EditStudent";
 import Login from "./scenes/Login/Login";
 import SearchStudent from "./scenes/student/SearchStudent";
 import PersistLogin from "./scenes/Login/PersistLogin";
+import Addadmin from "./scenes/addadmin/Addadmin";
 const queryClient = new QueryClient();
 const App = () => {
   const mode = useSelector((state: RootState) => state.global.mode);
@@ -46,6 +47,7 @@ const App = () => {
               <Route path="/hostel" element={<Hostel />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/notification" element={<Notification />} />
+              <Route path="/addadmin" element={<Addadmin />} />
             </Route>
           </Routes>
         </ThemeProvider>

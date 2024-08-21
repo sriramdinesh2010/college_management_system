@@ -7,8 +7,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import EmployeeReg from "./EmployeeReg";
 import EmployeeList from "./EmployeeList";
 import Header from "../../components/Header";
-import { useTheme } from "@mui/material";
-import { ThemeSettings } from "../../app/state/theme";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -39,7 +37,6 @@ function a11yProps(index: number) {
 }
 
 export default function BasicTabs() {
-  const theme = useTheme<ThemeSettings>();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -48,7 +45,7 @@ export default function BasicTabs() {
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Header title={"Employee"} subtitle={"Employee Registration Form"} />
+      <Header title={"Employee"} subtitle={""} />
       <Box
         sx={{
           borderBottom: 1,

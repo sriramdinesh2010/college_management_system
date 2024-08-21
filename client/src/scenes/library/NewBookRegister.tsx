@@ -59,7 +59,7 @@ type FormData = z.infer<typeof schema>;
 const NewBookRegister = () => {
   const {
     register,
-    handleSubmit,
+
     formState: { errors },
     reset,
   } = useForm<FormData>({ resolver: zodResolver(schema) });
@@ -68,6 +68,8 @@ const NewBookRegister = () => {
   const [addNewBook] = useAddNewBookMutation();
   const onBookSubmit = (data: FieldValues) => {
     console.log(data);
+    addNewBook(data);
+    setmessage(data.issn);
     reset();
   };
   const [open, setOpen] = useState(false);
