@@ -21,7 +21,17 @@ const Layout = () => {
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
         />
-        <Outlet />
+        <Box
+          component="main"
+          sx={(theme) => ({
+            height: { sm: "calc(100vh - 48px)", md: "100vh" },
+            flexGrow: 1,
+            backgroundColor: theme.palette.background.default,
+            overflow: "auto",
+          })}
+        >
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );

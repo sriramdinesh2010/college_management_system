@@ -13,7 +13,6 @@ const RequireAuth = ({ allowedRoles }: Props) => {
   ) : (
     <Navigate to="/" state={{ from: location }} replace />
   );
-
   return content;
 };
 export default RequireAuth;

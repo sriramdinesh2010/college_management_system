@@ -46,13 +46,11 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
   const { email, roles } = useAuth();
 
   useEffect(() => {
-    console.log("enter useeffect");
     if (isSuccess) {
-      localStorage.removeItem("persist");
+      console.log("Logout successful");
       navigate("/");
     }
   }, [isSuccess, navigate]);
-
   if (isError) {
     console.log(isError);
   }

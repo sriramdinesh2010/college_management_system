@@ -1,17 +1,16 @@
-import { Box, Button, Paper, useTheme } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 import { ThemeSettings } from "../../app/state/theme";
 import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import {
-  useDeleteStudentMutation,
-  useGetStudentsQuery,
-} from "./SutentApiSlice";
 import { useNavigate } from "react-router-dom";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { CSSProperties } from "react";
-
-const NewTable = () => {
+import {
+  useDeleteSubjectMutation,
+  useGetSubjectQuery,
+} from "./SubjectApiSlice";
+const SubjectList = () => {
   const theme = useTheme<ThemeSettings>();
   const override: CSSProperties = {
     display: "flex",
@@ -22,19 +21,14 @@ const NewTable = () => {
   const navigate = useNavigate();
 
   const handledeleteclick = (_id: string) => {
-    deleteStudent({ id: _id });
+    deleteSubject({ id: _id });
   };
-  const [deleteStudent] = useDeleteStudentMutation();
+  const [deleteSubject] = useDeleteSubjectMutation();
   const columns = [
     {
-      field: "registernumber",
-      headerName: "Reg Number",
-      flex: 0.2,
-    },
-    {
-      field: "department",
-      headerName: "Department",
-      flex: 0.2,
+      field: "program",
+      headerName: "Program",
+      flex: 0.1,
     },
     {
       field: "course",
@@ -42,29 +36,39 @@ const NewTable = () => {
       flex: 0.1,
     },
     {
-      field: "currentsemester",
+      field: "coursename",
+      headerName: "Course Name",
+      flex: 0.2,
+    },
+    {
+      field: "part",
+      headerName: "Part",
+      flex: 0.2,
+    },
+    {
+      field: "year",
+      headerName: "Year",
+      flex: 0.1,
+    },
+    {
+      field: "semester",
       headerName: "Semester",
       flex: 0.2,
     },
     {
-      field: "firstname",
-      headerName: "First Name",
-      flex: 0.3,
+      field: "subjectcode",
+      headerName: "Subject Code",
+      flex: 0.2,
     },
     {
-      field: "lastname",
-      headerName: "Intial",
-      flex: 0.1,
+      field: "subjectname",
+      headerName: "Subject Name",
+      flex: 0.4,
     },
     {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 0.3,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 0.3,
+      field: "courseincharge",
+      headerName: "Course Incharge",
+      flex: 0.2,
     },
     {
       field: "update",
@@ -102,23 +106,12 @@ const NewTable = () => {
       ),
     },
   ];
-
-  //data from react-quary
-  const { data: students, isLoading } = useGetStudentsQuery(
-    "ReactRTkQuaryList",
-    {
-      pollingInterval: 300000,
-    }
-  );
+  const { data: subject, isLoading } = useGetSubjectQuery("");
   if (isLoading) {
     return <ScaleLoader cssOverride={override} />;
   }
-  //this is return table
   return (
     <Box
-      component={Paper}
-      elevation={4}
-      m="1.5rem 2.5rem"
       sx={{
         "& .MuiDataGrid-root": {
           border: "none",
@@ -145,13 +138,14 @@ const NewTable = () => {
       }}
     >
       <DataGrid
-        loading={isLoading || !students}
+        loading={isLoading || !subject}
         getRowId={(row) => row._id}
-        rows={students || []}
+        rows={subject || []}
         columns={columns}
+        autoHeight
       />
     </Box>
   );
 };
 
-export default NewTable;
+export default SubjectList;

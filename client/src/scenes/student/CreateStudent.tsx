@@ -136,9 +136,13 @@ const StudentReg = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <Paper
+        elevation={4}
         sx={{
-          p: 5,
+          p: 4,
+          mb: 1,
           display: "flex",
+          width: "100%",
+          height: "auto",
           flexDirection: "column",
           backgroundColor: theme.palette.background.alt,
         }}
@@ -252,7 +256,7 @@ const StudentReg = () => {
             </Grid>
             <Grid item xs={6} md={4} lg={4} xl={3}>
               <InputLabel sx={{ mb: 1 }} error={!!errors.mothername}>
-                Mothers Name
+                Mother Name
               </InputLabel>
               <TextField
                 {...register("mothername")}
@@ -471,7 +475,7 @@ const StudentReg = () => {
               />
             </Grid>
             <Grid item xs={12} md={12} lg={12} xl={12}>
-              <Button variant="outlined" color="inherit" type="submit">
+              <Button variant="outlined" color="secondary" type="submit">
                 Create Student
               </Button>
             </Grid>

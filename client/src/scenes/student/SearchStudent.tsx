@@ -206,7 +206,7 @@ const SearchStudent = () => {
                     />
                   </Grid>
 
-                  <Grid xs={8} md={8} lg={8} xl={8} sx={{ m: 2 }}>
+                  <Grid item xs={8} md={8} lg={8} xl={8} sx={{ m: 2 }}>
                     <Grid container rowGap={0.5} spacing={1}>
                       <Grid item xs={12} md={6} lg={6} xl={4}>
                         <Typography variant="h5">

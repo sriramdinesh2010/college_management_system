@@ -31,6 +31,8 @@ app.use("/student", require("./routes/studentRoute"));
 app.use("/employee", require("./routes/employeeRoute"));
 app.use("/notes", require("./routes/noteRoute"));
 app.use("/books", require("./routes/bookRoutes"));
+app.use("/subject", require("./routes/subjectRoutes"));
+app.use("/dashdata", require("./routes/DashHomeRoutes"));
 
 app.all("*", (req, res) => {
   res.status(404);
